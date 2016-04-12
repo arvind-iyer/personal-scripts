@@ -20,9 +20,13 @@ if [ "$(type -P lpadmin)" = "" ]; then
 fi
 
 #check if cups is running
-if [ "$(systemctl status cups.service  2> /dev/null | grep running | wc -l )" -lt 1 ]; then
-	echo "Please install cups and cups-client or start cups service."
-	exit 1
+if [ "$(systemctl status cups.service  2> /dev/null | grep running | wc -l )" -lt 2 ]; then
+	echo "Attempting to start CUPS service"
+	if systemctl start cups.service ; then 
+		echo "CUPS service started"
+	else
+		echo "Please install cups and cups-client or start the cups service"
+	fi
 fi
 
 #if no curl, use wget instead
